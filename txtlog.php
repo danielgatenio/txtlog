@@ -64,7 +64,7 @@ public function top(){
 }
 public function menu(){
 	if(!empty($this->special)){
-		$html .= '<div id=menu>';
+		if($this->basename === 'txt') $html .= '<div id=menu>';
 		foreach($this->special as $thisSpecial){
 		
 			$filename = basename($thisSpecial,'.'.pathinfo($thisSpecial,PATHINFO_EXTENSION));//name of the file without extension
@@ -80,7 +80,7 @@ public function menu(){
 					}
 				}
 		}
-		$html .= '</div>';
+		if($this->basename === 'txt') $html .= '</div>';
 	
 	}
 	
