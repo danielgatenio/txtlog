@@ -1,0 +1,25 @@
+server {
+    listen 80;
+    server_name example.com;
+
+    location / {
+        # Equivalent to 'Options +FollowSymLinks -MultiViews'
+        # Nginx follows symlinks by default, so no need to explicitly enable it.
+        # Nginx does not have MultiViews, so we don't need to disable it.
+
+        # Try serving files or directories if they exist, otherwise rewrite to index.php
+        try_files $uri $uri/ @rewrite;
+    }
+
+    location @rewrite {
+        # Rewrite to /index.php?url=$1 if file does not exist
+        rewrite ^/(.*)$ /index.php?url=$1 last;
+    }
+
+    location /index.php {
+        # Usual PHP handling code here
+        include fastcgi_params;
+        fastcgi_pass unix:/run/php/php7.4-fpm.sock;  # Modify according to your PHP version
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    }
+}
